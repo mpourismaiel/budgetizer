@@ -1,8 +1,9 @@
 <script>
   import Tailwindcss from './Tailwindcss.svelte';
-  import budgetStore from './stores/budgets';
   import Budget from './components/Budget.svelte';
   import CreateBudget from './components/CreateBudget.svelte';
+  import budgetStore from './stores/budgets';
+  import { formatPrice } from './utils/number';
 
   let editingBudget = null,
     addMode = $budgetStore.length === 0;
@@ -28,6 +29,23 @@
             {#each $budgetStore as budget (budget.title)}
               <Budget {budget} {editingBudget} />
             {/each}
+            <li
+              class="budget w-full pl-4 pr-2 py-2 border-b border-gray-200
+              overflow-hidden transition-all duration-200 ease-in
+              hover:bg-gray-100">
+              <div class="flex items-center">
+                <h4 class="ml-5 flex-grow text-gray-400 font-medium">Total</h4>
+                <h5 class="font-medium">
+                  <span class="text-gray-600">
+                    {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.value, 0))}
+                  </span>
+                  <span class="text-gray-300">/</span>
+                  <span class="text-gray-500">
+                    {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.total, 0))}
+                  </span>
+                </h5>
+              </div>
+            </li>
           </ul>
         {:else}
           <p class="text-gray-600 mb-0">
