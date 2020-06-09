@@ -22,7 +22,7 @@
   };
 </script>
 
-<li
+<div
   class="budget w-full px-2 py-2 border-b border-gray-200 overflow-hidden
   transition-all duration-200 ease-in hover:bg-gray-100"
   class:editing={editingBudget && editingBudget.title === budget.title}
@@ -93,13 +93,9 @@
       </form>
     {/if}
   </div>
-</li>
+</div>
 
 <style>
-  .budget:first-child {
-    @apply border-t;
-  }
-
   .budget.low h5 {
     @apply text-red-500;
   }

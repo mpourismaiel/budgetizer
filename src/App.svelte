@@ -1,4 +1,6 @@
 <script>
+  import SortableList from 'svelte-sortable-list';
+
   import Tailwindcss from './Tailwindcss.svelte';
   import Budget from './components/Budget.svelte';
   import CreateBudget from './components/CreateBudget.svelte';
@@ -23,30 +25,32 @@
       <div
         class="float-left block flex-grow bg-white shadow-md rounded px-6 py-4
         mb-4 transition-all duration-200 ease-in budgets">
-        <h3 class="mb-3 text-lg font-bold">Budgets</h3>
+        <h3 class="pb-3 text-lg font-bold border-b border-gray-200">Budgets</h3>
         {#if $budgetStore.length > 0}
-          <ul>
-            {#each $budgetStore as budget (budget.title)}
-              <Budget {budget} {editingBudget} />
-            {/each}
-            <li
-              class="budget w-full pl-4 pr-2 py-2 border-b border-gray-200
-              overflow-hidden transition-all duration-200 ease-in
-              hover:bg-gray-100">
-              <div class="flex items-center">
-                <h4 class="ml-5 flex-grow text-gray-400 font-medium">Total</h4>
-                <h5 class="font-medium">
-                  <span class="text-gray-600">
-                    {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.value, 0))}
-                  </span>
-                  <span class="text-gray-300">/</span>
-                  <span class="text-gray-500">
-                    {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.total, 0))}
-                  </span>
-                </h5>
-              </div>
-            </li>
-          </ul>
+          <SortableList
+            list={$budgetStore}
+            key="title"
+            on:sort={e => budgetStore.set(e.detail)}
+            let:item>
+            <Budget budget={item} {editingBudget} />
+          </SortableList>
+          <div
+            class="budget w-full pl-4 pr-2 py-2 border-b border-gray-200
+            overflow-hidden transition-all duration-200 ease-in
+            hover:bg-gray-100">
+            <div class="flex items-center">
+              <h4 class="ml-5 flex-grow text-gray-400 font-medium">Total</h4>
+              <h5 class="font-medium">
+                <span class="text-gray-600">
+                  {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.value, 0))}
+                </span>
+                <span class="text-gray-300">/</span>
+                <span class="text-gray-500">
+                  {formatPrice($budgetStore.reduce((tmp, b) => tmp + b.total, 0))}
+                </span>
+              </h5>
+            </div>
+          </div>
         {:else}
           <p class="text-gray-600 mb-0">
             You haven't assigned any budgets yet.

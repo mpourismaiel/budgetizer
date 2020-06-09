@@ -15,6 +15,7 @@ const createBudgetStore = () => {
 
   return {
     subscribe,
+    set,
     addBudget: budget =>
       update(data => [
         ...data.filter(({ title }) => title !== budget.title),
