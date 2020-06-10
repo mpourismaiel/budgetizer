@@ -4,7 +4,7 @@
   @tailwind utilities;
 
   body {
-    padding: 0;
+    @apply m-0 p-0 bg-gray-200;
   }
 
   .btn {
